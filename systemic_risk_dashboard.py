@@ -259,10 +259,13 @@ def multi_seed_analysis(seeds, num_banks, connection_probability, max_exposure_f
 # HELPER: network plot
 # ============================================================
 @st.cache_data(show_spinner=False)
-def get_layout(_G, seed):
+def get_layout(_G, seed, num_banks):
+    # num_banks is included in the cache key (even though it's not used directly)
+    # so that increasing the bank count forces a fresh layout instead of reusing
+    # a stale cached position dict that's missing the new nodes.
     return nx.spring_layout(_G, seed=int(seed))
 
-pos = get_layout(G, seed)
+pos = get_layout(G, seed, num_banks)
 
 def plot_network(highlight_layers=None, size_by="Eigenvector"):
     edge_x, edge_y = [], []
